@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 //Card rappresenta una carta da gioco
 type card struct {
@@ -9,9 +12,17 @@ type card struct {
 }
 
 func (c card) print() {
-	fmt.Print(c.value + " " + c.suit)
+	fmt.Println(c.toString())
 }
 
-func (c card) println() {
-	fmt.Println(c.value + " " + c.suit)
+func (c card) toString() string {
+	return c.value + "_" + c.suit
+}
+
+func cardFromString(st string) card {
+	s := strings.Split(st, "_")
+
+	c := card{suit: s[0], value: s[1]}
+
+	return c
 }
