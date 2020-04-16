@@ -21,7 +21,7 @@ func (d deck) print() {
 func (d *deck) shuffle() *deck {
 	var shuffledDeck deck
 	var j int
-	r := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	totalCards := len(d.cards)
 
@@ -63,10 +63,10 @@ func (d *deck) draw() card {
 	return c
 }
 
-func (d *deck) drawN(nCards int) []card {
-	//@TODO gestire il drawN su deck con meno carte
-	c := d.cards[:nCards]
-	d.cards = d.cards[nCards:]
+func (d *deck) deal(n int) []card {
+	//@TODO gestire il deal su deck con meno carte
+	c := d.cards[:n]
+	d.cards = d.cards[n:]
 
 	return c
 }

@@ -22,7 +22,7 @@ func (c card) toString() string {
 func cardFromString(st string) card {
 	s := strings.Split(st, "_")
 
-	c := card{suit: s[0], value: s[1]}
+	c := card{suit: s[1], value: s[0]}
 
 	return c
 }
