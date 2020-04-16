@@ -1,7 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"math/rand"
+	"os"
+	"strings"
 	"time"
 )
 
@@ -10,10 +14,8 @@ type deck struct {
 	cards []card
 }
 
-func (d deck) printAll() {
-	for _, card := range d.cards {
-		card.println()
-	}
+func (d deck) print() {
+	fmt.Println(d.toString())
 }
 
 func (d *deck) shuffle() *deck {
@@ -67,4 +69,45 @@ func (d *deck) drawN(nCards int) []card {
 	d.cards = d.cards[nCards:]
 
 	return c
+}
+
+func (d *deck) toString() string {
+	var ret string
+	for _, card := range d.cards {
+		ret = ret + "|" + card.toString()
+	}
+
+	ret = strings.TrimLeft(ret, "|")
+
+	return ret
+}
+
+//deckFromString returns a deck based on incoming string configuration. Incoming string should be in the "toString" format.
+func deckFromString(st string) deck {
+	var d deck
+	cards := strings.Split(st, "|")
+	for _, card := range cards {
+		d.AddCard(cardFromString(card))
+	}
+	return d
+}
+
+func (d *deck) saveToFile(filename string) error {
+	return ioutil.WriteFile(filename, []byte(d.toString()), 0644)
+}
+
+func (d *deck) loadFromFile(filename string) *deck {
+	//b:= byteslice coming from readfile, contains the converted deck
+	b, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		fmt.Println("Error: ", err)
+		os.Exit(1)
+	}
+
+	tempDeck := deckFromString(string(b))
+
+	d.cards = tempDeck.cards
+
+	return d
 }
